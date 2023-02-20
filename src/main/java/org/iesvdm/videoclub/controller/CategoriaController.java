@@ -12,7 +12,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200/")
 @RequestMapping("/categorias")
 public class CategoriaController {
 
@@ -24,7 +24,7 @@ public class CategoriaController {
 
     @GetMapping({"","/"})
     public List<Categoria> all() {
-        log.info("Accediendo a todas las categorias");
+        log.info("Accediendo a todas las películas");
         return this.categoriaService.all();
     }
 
@@ -33,11 +33,12 @@ public class CategoriaController {
         return this.categoriaService.save(categoria);
     }
 
+    @CrossOrigin(origins = "http://localhost:4200/")
     @GetMapping("/{id}")
     public Categoria one(@PathVariable("id") Long id) {
         return this.categoriaService.one(id);
     }
-
+    @CrossOrigin(origins = "http://localhost:4200/")
     @PutMapping("/{id}")
     public Categoria replaceCategoria(@PathVariable("id") Long id, @RequestBody Categoria categoria) {
         return this.categoriaService.replace(id, categoria);
@@ -46,8 +47,9 @@ public class CategoriaController {
 
     @ResponseBody
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CrossOrigin(origins = "http://localhost:4200")
     @DeleteMapping("/{id}")
-    public void deletePelicula(@PathVariable("id") Long id) {
+    public void deleteCategoria(@PathVariable("id") Long id) {
         this.categoriaService.delete(id);
     }
 
