@@ -5,6 +5,8 @@ import { CategoriaRoutingModule } from './categoria-routing.module';
 import { IndexComponent } from './index/index.component';
 import { CreateComponent } from './create/create.component';
 import { EditComponent } from './edit/edit.component';
+import {FormsModule} from "@angular/forms";
+import {ReactiveFormsModule} from "@angular/forms";
 
 
 @NgModule({
@@ -13,9 +15,16 @@ import { EditComponent } from './edit/edit.component';
     CreateComponent,
     EditComponent
   ],
+  exports: [
+    IndexComponent,
+    CreateComponent,
+    EditComponent
+  ],
   imports: [
     CommonModule,
-    CategoriaRoutingModule
+    CategoriaRoutingModule,
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class CategoriaModule { }

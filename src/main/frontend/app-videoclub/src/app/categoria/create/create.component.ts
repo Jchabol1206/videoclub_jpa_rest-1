@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormGroup, FormBuilder, Validators, FormControl} from '@angular/forms';
 import {CategoriaService} from "../categoria.service";
 import {Router} from "@angular/router";
+
 
 @Component({
   selector: 'app-create',
