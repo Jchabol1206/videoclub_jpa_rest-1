@@ -3,9 +3,16 @@ package org.iesvdm.videoclub.service;
 import org.iesvdm.videoclub.domain.Pelicula;
 import org.iesvdm.videoclub.exception.PeliculaNotFoundException;
 import org.iesvdm.videoclub.repository.PeliculaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class PeliculaService {
@@ -20,6 +27,45 @@ public class PeliculaService {
         return this.peliculaRepository.findAll();
     }
 
+    public Map<String, Object> all(int pagina, int tamanio) {
+        PageRequest paginado = PageRequest.of(pagina, tamanio, Sort.by("idPelicula").ascending());
+
+        Page<Pelicula> pageAll = this.peliculaRepository.findAll(paginado);
+
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("peliculas", pageAll.getContent());
+        response.put("currentPage", pageAll.getNumber());
+        response.put("totalItems", pageAll.getTotalElements());
+        response.put("totalPages", pageAll.getTotalPages());
+
+        return response;
+    }
+    public Map<String, Object> all(int pagina, int tamanio, Optional<String> buscarOptional, Optional<String> ordenarOptional) {
+        PageRequest paginado=PageRequest.of(pagina, tamanio, Sort.by("idPelicula").ascending());
+
+        if((ordenarOptional.isPresent() && ordenarOptional.get().equals("desc") )){
+            paginado= PageRequest.of(pagina, tamanio, Sort.by("idPelicula").descending()) ;
+        }
+
+
+        Page<Pelicula> pageAll = this.peliculaRepository.findAll(paginado);
+
+        if(buscarOptional.isPresent()){
+            System.out.println("////////////////////////////////////////////");
+            System.out.println(this.peliculaRepository.findPeliculaByClasificacionContainingIgnoreCase(buscarOptional.get(), paginado).toString());
+            pageAll= this.peliculaRepository.findPeliculaByClasificacionContainingIgnoreCase(buscarOptional.get(), paginado);
+        }
+
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("peliculas", pageAll.getContent());
+        response.put("currentPage", pageAll.getNumber());
+        response.put("totalItems", pageAll.getTotalElements());
+        response.put("totalPages", pageAll.getTotalPages());
+
+        return response;
+    }
     public Pelicula save(Pelicula pelicula) {
         return this.peliculaRepository.save(pelicula);
     }
