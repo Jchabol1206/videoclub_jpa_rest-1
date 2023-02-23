@@ -5,10 +5,10 @@ import org.iesvdm.videoclub.exception.PeliculaNotFoundException;
 import org.iesvdm.videoclub.repository.PeliculaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +42,7 @@ public class PeliculaService {
         return response;
     }
     public Map<String, Object> all(int pagina, int tamanio, Optional<String> buscarOptional, Optional<String> ordenarOptional) {
-        PageRequest paginado=PageRequest.of(pagina, tamanio, Sort.by("idPelicula").ascending());
+        Pageable paginado=PageRequest.of(pagina, tamanio, Sort.by("idPelicula").ascending());
 
         if((ordenarOptional.isPresent() && ordenarOptional.get().equals("desc") )){
             paginado= PageRequest.of(pagina, tamanio, Sort.by("idPelicula").descending()) ;
@@ -53,8 +53,8 @@ public class PeliculaService {
 
         if(buscarOptional.isPresent()){
             System.out.println("////////////////////////////////////////////");
-            System.out.println(this.peliculaRepository.findPeliculaByClasificacionContainingIgnoreCase(buscarOptional.get(), paginado).toString());
-            pageAll= this.peliculaRepository.findPeliculaByClasificacionContainingIgnoreCase(buscarOptional.get(), paginado);
+            System.out.println(this.peliculaRepository.findByClasificacionContainingIgnoreCase(buscarOptional.get(), paginado).toString());
+            pageAll= this.peliculaRepository.findByClasificacionContainingIgnoreCase(buscarOptional.get(), paginado);
         }
 
         Map<String, Object> response = new HashMap<>();

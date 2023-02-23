@@ -14,7 +14,7 @@ public interface PeliculaRepository extends JpaRepository<Pelicula, Long> {
 
 
 
-    public Page<Pelicula> findPeliculaByClasificacionContainingIgnoreCase(String clasificacion, PageRequest paginado);
+    public Page<Pelicula> findByClasificacionContainingIgnoreCase(String clasificacion, Pageable paginado);
 
 
 }
