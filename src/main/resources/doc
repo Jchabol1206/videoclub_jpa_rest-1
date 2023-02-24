@@ -77,3 +77,48 @@ IgnoreCase
 findByFirstnameIgnoreCase
 … where UPPER(x.firstname) = UPPER(?1)
 
+ @ManyToOne tiene los siguientes atributos:
+Optional:
+Indica si la relación es opcional, es decir, si el objeto puede ser null.
+
+Esta propiedad se utiliza optimizar las consultas. Si JPA sabe que una relación es opcional, entonces puede realizar un OUTER JOIN  o realizar la consulta por separado, mientras que, si no es opcional, puede realizar un INNER JOIN  para realizar una sola consulta.
+Cascade:
+Esta propiedad le indica que operaciones en cascada puede realizar con la Entidad relacionada, los valores posibles son ALL , PERSIST , MERGE , REMOVE , REFRESH , DETACH y están definidos en la enumeración javax.persistence.CascadeType.
+
+Si vemos el detalle de las operaciones en cascada de JPA / Hibernate:
+
+CascadeType.ALL: se aplican todos los tipos de cascada.
+
+CascadeType.PERSIST: las operaciones de guardado en la base de datos de las entidades padre se propagarán a las entidades relacionadas.
+
+CascadeType.MERGE: las entidades relacionadas se actualizarán al contexto de persistencia cuando la entidad propietaria se actualice.
+
+CascadeType.REMOVE: las entidades relacionadas se eliminan de la base de datos cuando la entidad propietaria/padre se elimine.
+
+CascadeType.REFRESH: las entidades relacionadas actualizan sus datos desde la base de datos cuando la entidad propietaria se actualiza.
+
+CascadeType.DETACH: se separan del contexto de persistencia todas las entidades relacionadas cuando ocurre una operación de separación manual.
+
+
+Recomendación de Java Champion Vlad Mihalcea (https://vladmihalcea.com/ ) CascadeType.ALL y @ManyToOne
+
+No debe usar CascadeType.ALL en @ManyToOne ya que las transiciones de estado de entidad deben propagarse de las entidades principales a las secundarias, no al revés.
+
+@ManyToOne está en el lado secundario de la asociación, ya que asigna la columna de clave externa subyacente.
+
+Por lo tanto, debe mover el CascadeType.ALL de la asociación @ManyToOne al lado @OneToMany, que también debe usar el atributo mappedBy, ya que es el mapeo de relación de tabla de uno a muchos más eficiente.
+
+
+
+
+
+Fetch:
+Esta propiedad se utiliza para determinar cómo debe ser cargada la entidad, los valores están definidos en la enumeración javax.persistence.FetchType  y los valores posibles son:
+
+EAGER (ansioso): Indica que la relación debe de ser cargada al momento de cargar la entidad.
+LAZY (perezoso): Indica que la relación solo se cargará cuando la propiedad sea leída por primera vez.
+targetEntity:
+Esta propiedad recibe una clase (Class ) la cual corresponde a la clase de la relación. No suele ser utilizada, pues JPA puede inferir la clase por el tipo de la propiedad.
+
+
+
